@@ -13,7 +13,7 @@ public interface VeiculoService {
 
     VeiculoResponseDTO buscarPorId(Integer id);
 
-    List<VeiculoResponseDTO> buscarPorFiltros(TipoVeiculo tipo, String modelo, Integer ano);
+    List<VeiculoResponseDTO> buscarPorFiltros(TipoVeiculo tipo, String modelo, Integer ano, String cor);
 
     VeiculoResponseDTO atualizarVeiculo(Integer id, VeiculoRequestDTO dto);
 

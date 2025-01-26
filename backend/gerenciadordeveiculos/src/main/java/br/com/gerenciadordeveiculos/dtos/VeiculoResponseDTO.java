@@ -19,6 +19,8 @@ public class VeiculoResponseDTO {
 
     private Double preco;
 
+    private String cor;
+
     private Integer quantidadePortas;
 
     private TipoCombustivel tipoCombustivel;
