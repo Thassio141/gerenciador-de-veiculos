@@ -1,6 +1,6 @@
 package br.com.gerenciadordeveiculos.enums;
 
 public enum TipoVeiculo {
-    CAR,
+    CARRO,
     MOTO
 }
