@@ -13,4 +13,9 @@ public class Moto extends Veiculo {
 
     private Integer cilindrada;
 
+    public Moto(Integer id, String modelo, String fabricante, Integer ano, Double preco, Integer cilindrada) {
+        super(id, modelo, fabricante, ano, preco);
+        this.cilindrada = cilindrada;
+    }
+
 }
