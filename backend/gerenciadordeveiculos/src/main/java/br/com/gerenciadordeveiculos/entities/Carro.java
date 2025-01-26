@@ -16,4 +16,10 @@ public class Carro extends Veiculo {
 
     private TipoCombustivel tipoCombustivel;
 
+    public Carro(Integer id, String modelo, String fabricante, Integer ano, Double preco,
+                 Integer quantidadePortas, TipoCombustivel tipoCombustivel) {
+        super(id, modelo, fabricante, ano, preco);
+        this.quantidadePortas = quantidadePortas;
+        this.tipoCombustivel = tipoCombustivel;
+    }
 }
