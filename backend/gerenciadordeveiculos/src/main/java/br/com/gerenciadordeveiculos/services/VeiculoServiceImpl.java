@@ -25,35 +25,14 @@ public class VeiculoServiceImpl implements VeiculoService {
     @Override
     public VeiculoResponseDTO criarVeiculo(VeiculoRequestDTO dto) {
         if (dto.getTipo() == TipoVeiculo.CARRO) {
-            validarCamposCarro(dto);
 
-            Carro carro = new Carro(
-                    null,
-                    dto.getTipo(),
-                    dto.getModelo(),
-                    dto.getFabricante(),
-                    dto.getAno(),
-                    dto.getPreco(),
-                    dto.getCor(),
-                    dto.getQuantidadePortas(),
-                    dto.getTipoCombustivel()
-            );
+            Carro carro = construirCarro(dto, null);
             veiculoRepository.salvarCarro(carro);
             return converterParaResponseDTO(carro);
 
         } else if (dto.getTipo() == TipoVeiculo.MOTO) {
-            validarCamposMoto(dto);
 
-            Moto moto = new Moto(
-                    null,
-                    dto.getTipo(),
-                    dto.getModelo(),
-                    dto.getFabricante(),
-                    dto.getAno(),
-                    dto.getPreco(),
-                    dto.getCor(),
-                    dto.getCilindrada()
-            );
+            Moto moto = construirMoto(dto, null);
             veiculoRepository.salvarMoto(moto);
             return converterParaResponseDTO(moto);
 
@@ -95,35 +74,18 @@ public class VeiculoServiceImpl implements VeiculoService {
         }
 
         if (dto.getTipo() == TipoVeiculo.CARRO && existente instanceof Carro) {
-            validarCamposCarro(dto);
+            validarCampos(dto);
 
-            Carro carro = new Carro();
-            carro.setId(id);
-            carro.setTipo(TipoVeiculo.CARRO);
-            carro.setModelo(dto.getModelo());
-            carro.setFabricante(dto.getFabricante());
-            carro.setAno(dto.getAno());
-            carro.setPreco(dto.getPreco());
-            carro.setCor(dto.getCor());
-            carro.setQuantidadePortas(dto.getQuantidadePortas());
-            carro.setTipoCombustivel(dto.getTipoCombustivel());
+            Carro carro = construirCarro(dto,id);
 
             veiculoRepository.atualizarCarro(carro);
+
             return converterParaResponseDTO(carro);
 
         } else if (dto.getTipo() == TipoVeiculo.MOTO && existente instanceof Moto) {
-            validarCamposMoto(dto);
+            validarCampos(dto);
 
-            Moto moto = new Moto();
-            moto.setId(id);
-            moto.setTipo(TipoVeiculo.MOTO);
-            moto.setModelo(dto.getModelo());
-            moto.setFabricante(dto.getFabricante());
-            moto.setAno(dto.getAno());
-            moto.setPreco(dto.getPreco());
-            moto.setCor(dto.getCor());
-            moto.setCilindrada(dto.getCilindrada());
-
+            Moto moto = construirMoto(dto, id);
             veiculoRepository.atualizarMoto(moto);
             return converterParaResponseDTO(moto);
 
@@ -141,27 +103,29 @@ public class VeiculoServiceImpl implements VeiculoService {
         veiculoRepository.deletar(id);
     }
 
-    private void validarCamposCarro(VeiculoRequestDTO dto) {
-        if (dto.getQuantidadePortas() == null) {
-            throw new ExcecaoNegocio("Quantidade de portas é obrigatória para veículo do tipo CARRO.");
-        }
-        if (dto.getTipoCombustivel() == null) {
-            throw new ExcecaoNegocio("Tipo de combustível é obrigatório para veículo do tipo CARRO.");
-        }
-        if (dto.getCilindrada() != null) {
-            throw new ExcecaoNegocio("Cilindrada deve ser nula para veículo do tipo CARRO.");
-        }
-    }
-
-    private void validarCamposMoto(VeiculoRequestDTO dto) {
-        if (dto.getCilindrada() == null) {
-            throw new ExcecaoNegocio("Cilindrada é obrigatória para veículo do tipo MOTO.");
-        }
-        if (dto.getQuantidadePortas() != null) {
-            throw new ExcecaoNegocio("Quantidade de portas deve ser nula para veículo do tipo MOTO.");
-        }
-        if (dto.getTipoCombustivel() != null) {
-            throw new ExcecaoNegocio("Tipo de combustível deve ser nulo para veículo do tipo MOTO.");
+    private void validarCampos(VeiculoRequestDTO dto) {
+        if (dto.getTipo() == TipoVeiculo.CARRO) {
+            if (dto.getQuantidadePortas() == null) {
+                throw new ExcecaoNegocio("Quantidade de portas é obrigatória para veículo do tipo CARRO.");
+            }
+            if (dto.getTipoCombustivel() == null) {
+                throw new ExcecaoNegocio("Tipo de combustível é obrigatório para veículo do tipo CARRO.");
+            }
+            if (dto.getCilindrada() != null) {
+                throw new ExcecaoNegocio("Cilindrada deve ser nula para veículo do tipo CARRO.");
+            }
+        } else if (dto.getTipo() == TipoVeiculo.MOTO) {
+            if (dto.getCilindrada() == null) {
+                throw new ExcecaoNegocio("Cilindrada é obrigatória para veículo do tipo MOTO.");
+            }
+            if (dto.getQuantidadePortas() != null) {
+                throw new ExcecaoNegocio("Quantidade de portas deve ser nula para veículo do tipo MOTO.");
+            }
+            if (dto.getTipoCombustivel() != null) {
+                throw new ExcecaoNegocio("Tipo de combustível deve ser nulo para veículo do tipo MOTO.");
+            }
+        } else {
+            throw new ExcecaoNegocio("Tipo de veículo inválido.");
         }
     }
 
@@ -175,17 +139,42 @@ public class VeiculoServiceImpl implements VeiculoService {
         dto.setPreco(veiculo.getPreco());
         dto.setCor(veiculo.getCor());
 
-        if (veiculo instanceof Carro) {
+        if (veiculo instanceof Carro carro) {
             dto.setTipo(TipoVeiculo.CARRO);
-            Carro carro = (Carro) veiculo;
             dto.setQuantidadePortas(carro.getQuantidadePortas());
             dto.setTipoCombustivel(carro.getTipoCombustivel());
-        } else if (veiculo instanceof Moto) {
+        } else if (veiculo instanceof Moto moto) {
             dto.setTipo(TipoVeiculo.MOTO);
-            Moto moto = (Moto) veiculo;
             dto.setCilindrada(moto.getCilindrada());
         }
 
         return dto;
+    }
+
+    private Carro construirCarro(VeiculoRequestDTO dto, Integer id) {
+        return new Carro(
+                id,
+                TipoVeiculo.CARRO,
+                dto.getModelo(),
+                dto.getFabricante(),
+                dto.getAno(),
+                dto.getPreco(),
+                dto.getCor(),
+                dto.getQuantidadePortas(),
+                dto.getTipoCombustivel()
+        );
+    }
+
+    private Moto construirMoto(VeiculoRequestDTO dto, Integer id) {
+        return new Moto(
+                id,
+                TipoVeiculo.MOTO,
+                dto.getModelo(),
+                dto.getFabricante(),
+                dto.getAno(),
+                dto.getPreco(),
+                dto.getCor(),
+                dto.getCilindrada()
+        );
     }
 }
