@@ -9,11 +9,9 @@ import java.util.List;
 public interface VeiculoService {
     VeiculoResponseDTO criarVeiculo(VeiculoRequestDTO dto);
 
-    List<VeiculoResponseDTO> buscarTodos();
+    List<VeiculoResponseDTO> buscarVeiculosPaginado(Integer page, Integer size, TipoVeiculo tipo, String modelo, Integer ano, String cor);
 
     VeiculoResponseDTO buscarPorId(Integer id);
-
-    List<VeiculoResponseDTO> buscarPorFiltros(TipoVeiculo tipo, String modelo, Integer ano, String cor);
 
     VeiculoResponseDTO atualizarVeiculo(Integer id, VeiculoRequestDTO dto);
 
