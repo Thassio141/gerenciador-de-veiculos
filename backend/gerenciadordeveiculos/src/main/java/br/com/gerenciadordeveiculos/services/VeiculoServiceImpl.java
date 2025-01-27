@@ -42,8 +42,34 @@ public class VeiculoServiceImpl implements VeiculoService {
     }
 
     @Override
-    public List<VeiculoResponseDTO> buscarTodos() {
-        List<Veiculo> veiculos = veiculoRepository.buscarTodos();
+    public List<VeiculoResponseDTO> buscarVeiculosPaginado(
+            Integer page,
+            Integer size,
+            TipoVeiculo tipo,
+            String modelo,
+            Integer ano,
+            String cor
+    ) {
+        if (page < 0) {
+            throw new ExcecaoNegocio("O número da página não pode ser negativo.");
+        }
+        if (size <= 0) {
+            throw new ExcecaoNegocio("O tamanho da página deve ser maior que zero.");
+        }
+
+        Integer offset = page * size;
+
+        boolean temFiltro = (tipo != null || (modelo != null && !modelo.isEmpty())
+                || ano != null || (cor != null && !cor.isEmpty()));
+
+        List<Veiculo> veiculos;
+
+        if (temFiltro) {
+            veiculos = veiculoRepository.buscarPorFiltrosPaginado(tipo, modelo, ano, cor, offset, size);
+        } else {
+            veiculos = veiculoRepository.buscarTodosPaginado(offset, size);
+        }
+
         return veiculos.stream()
                 .map(this::converterParaResponseDTO)
                 .collect(Collectors.toList());
@@ -56,14 +82,6 @@ public class VeiculoServiceImpl implements VeiculoService {
             throw new ExcecaoNegocio("Veículo inexistente para ID: " + id);
         }
         return converterParaResponseDTO(veiculo);
-    }
-
-    @Override
-    public List<VeiculoResponseDTO> buscarPorFiltros(TipoVeiculo tipo, String modelo, Integer ano,String cor) {
-        List<Veiculo> veiculos = veiculoRepository.buscarPorFiltros(tipo, modelo, ano,cor);
-        return veiculos.stream()
-                .map(this::converterParaResponseDTO)
-                .collect(Collectors.toList());
     }
 
     @Override

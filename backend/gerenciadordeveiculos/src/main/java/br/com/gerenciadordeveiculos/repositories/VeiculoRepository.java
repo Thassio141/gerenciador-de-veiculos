@@ -50,17 +50,23 @@ public class VeiculoRepository {
         );
     }
 
-    public List<Veiculo> buscarTodos() {
-        String sql = "SELECT * FROM veiculos";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> mapResultSetToVeiculo(rs));
+    public List<Veiculo> buscarTodosPaginado(int offset, int limit) {
+        String sql = "SELECT * FROM veiculos ORDER BY id LIMIT ? OFFSET ?";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> mapResultSetToVeiculo(rs), limit, offset);
     }
 
     public Veiculo buscarPorId(Integer id) {
         String sql = "SELECT * FROM veiculos WHERE id = ?";
         return jdbcTemplate.queryForObject(sql, (rs, rowNum) -> mapResultSetToVeiculo(rs), id);
     }
-
-    public List<Veiculo> buscarPorFiltros(TipoVeiculo tipo, String modelo, Integer ano, String cor) {
+    public List<Veiculo> buscarPorFiltrosPaginado(
+            TipoVeiculo tipo,
+            String modelo,
+            Integer ano,
+            String cor,
+            int offset,
+            int limit
+    ) {
         StringBuilder sb = new StringBuilder("SELECT * FROM veiculos WHERE 1=1");
 
         if (tipo != null) {
@@ -75,6 +81,8 @@ public class VeiculoRepository {
         if (cor != null && !cor.isEmpty()) {
             sb.append(" AND cor ILIKE '%").append(cor).append("%'");
         }
+
+        sb.append(" ORDER BY id LIMIT ").append(limit).append(" OFFSET ").append(offset);
 
         return jdbcTemplate.query(sb.toString(), (rs, rowNum) -> mapResultSetToVeiculo(rs));
     }

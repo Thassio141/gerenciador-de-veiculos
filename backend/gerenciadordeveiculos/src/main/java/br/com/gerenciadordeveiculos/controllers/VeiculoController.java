@@ -27,20 +27,20 @@ public class VeiculoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<VeiculoResponseDTO>> buscarTodos(
+    public ResponseEntity<List<VeiculoResponseDTO>> buscarVeiculos(
             @RequestParam(required = false) TipoVeiculo tipo,
             @RequestParam(required = false) String modelo,
             @RequestParam(required = false) Integer ano,
-            @RequestParam(required = false) String cor
+            @RequestParam(required = false) String cor,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size
     ) {
-        if (tipo != null || modelo != null || ano != null || (cor != null && !cor.isEmpty())) {
-            List<VeiculoResponseDTO> filtrados = veiculoService.buscarPorFiltros(tipo, modelo, ano, cor);
-            return ResponseEntity.ok(filtrados);
-        } else {
-            List<VeiculoResponseDTO> todos = veiculoService.buscarTodos();
-            return ResponseEntity.ok(todos);
-        }
+        List<VeiculoResponseDTO> lista = veiculoService.buscarVeiculosPaginado(
+                page, size, tipo, modelo, ano, cor
+        );
+        return ResponseEntity.ok(lista);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<VeiculoResponseDTO> buscarPorId(@PathVariable Integer id) {
