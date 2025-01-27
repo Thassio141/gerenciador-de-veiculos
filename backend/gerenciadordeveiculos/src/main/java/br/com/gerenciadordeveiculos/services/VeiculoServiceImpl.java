@@ -29,10 +29,12 @@ public class VeiculoServiceImpl implements VeiculoService {
 
             Carro carro = new Carro(
                     null,
+                    dto.getTipo(),
                     dto.getModelo(),
                     dto.getFabricante(),
                     dto.getAno(),
                     dto.getPreco(),
+                    dto.getCor(),
                     dto.getQuantidadePortas(),
                     dto.getTipoCombustivel()
             );
@@ -44,10 +46,12 @@ public class VeiculoServiceImpl implements VeiculoService {
 
             Moto moto = new Moto(
                     null,
+                    dto.getTipo(),
                     dto.getModelo(),
                     dto.getFabricante(),
                     dto.getAno(),
                     dto.getPreco(),
+                    dto.getCor(),
                     dto.getCilindrada()
             );
             veiculoRepository.salvarMoto(moto);
@@ -76,8 +80,8 @@ public class VeiculoServiceImpl implements VeiculoService {
     }
 
     @Override
-    public List<VeiculoResponseDTO> buscarPorFiltros(TipoVeiculo tipo, String modelo, Integer ano) {
-        List<Veiculo> veiculos = veiculoRepository.buscarPorFiltros(tipo, modelo, ano);
+    public List<VeiculoResponseDTO> buscarPorFiltros(TipoVeiculo tipo, String modelo, Integer ano,String cor) {
+        List<Veiculo> veiculos = veiculoRepository.buscarPorFiltros(tipo, modelo, ano,cor);
         return veiculos.stream()
                 .map(this::converterParaResponseDTO)
                 .collect(Collectors.toList());
@@ -95,10 +99,12 @@ public class VeiculoServiceImpl implements VeiculoService {
 
             Carro carro = new Carro();
             carro.setId(id);
+            carro.setTipo(TipoVeiculo.CARRO);
             carro.setModelo(dto.getModelo());
             carro.setFabricante(dto.getFabricante());
             carro.setAno(dto.getAno());
             carro.setPreco(dto.getPreco());
+            carro.setCor(dto.getCor());
             carro.setQuantidadePortas(dto.getQuantidadePortas());
             carro.setTipoCombustivel(dto.getTipoCombustivel());
 
@@ -110,10 +116,12 @@ public class VeiculoServiceImpl implements VeiculoService {
 
             Moto moto = new Moto();
             moto.setId(id);
+            moto.setTipo(TipoVeiculo.MOTO);
             moto.setModelo(dto.getModelo());
             moto.setFabricante(dto.getFabricante());
             moto.setAno(dto.getAno());
             moto.setPreco(dto.getPreco());
+            moto.setCor(dto.getCor());
             moto.setCilindrada(dto.getCilindrada());
 
             veiculoRepository.atualizarMoto(moto);
@@ -160,10 +168,12 @@ public class VeiculoServiceImpl implements VeiculoService {
     private VeiculoResponseDTO converterParaResponseDTO(Veiculo veiculo) {
         VeiculoResponseDTO dto = new VeiculoResponseDTO();
         dto.setId(veiculo.getId());
+        dto.setTipo(veiculo.getTipo());
         dto.setModelo(veiculo.getModelo());
         dto.setFabricante(veiculo.getFabricante());
         dto.setAno(veiculo.getAno());
         dto.setPreco(veiculo.getPreco());
+        dto.setCor(veiculo.getCor());
 
         if (veiculo instanceof Carro) {
             dto.setTipo(TipoVeiculo.CARRO);

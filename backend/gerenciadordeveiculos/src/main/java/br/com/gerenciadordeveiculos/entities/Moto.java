@@ -1,5 +1,6 @@
 package br.com.gerenciadordeveiculos.entities;
 
+import br.com.gerenciadordeveiculos.enums.TipoVeiculo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -13,8 +14,17 @@ public class Moto extends Veiculo {
 
     private Integer cilindrada;
 
-    public Moto(Integer id, String modelo, String fabricante, Integer ano, Double preco, Integer cilindrada) {
-        super(id, modelo, fabricante, ano, preco);
+    public Moto(
+            Integer id,
+            TipoVeiculo tipo,
+            String modelo,
+            String fabricante,
+            Integer ano,
+            Double preco,
+            String cor,
+            Integer cilindrada
+    ) {
+        super(id, tipo, modelo, fabricante, ano, preco, cor);
         this.cilindrada = cilindrada;
     }
 

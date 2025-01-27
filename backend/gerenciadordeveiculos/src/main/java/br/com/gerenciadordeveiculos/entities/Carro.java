@@ -1,6 +1,7 @@
 package br.com.gerenciadordeveiculos.entities;
 
 import br.com.gerenciadordeveiculos.enums.TipoCombustivel;
+import br.com.gerenciadordeveiculos.enums.TipoVeiculo;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,9 +17,18 @@ public class Carro extends Veiculo {
 
     private TipoCombustivel tipoCombustivel;
 
-    public Carro(Integer id, String modelo, String fabricante, Integer ano, Double preco,
-                 Integer quantidadePortas, TipoCombustivel tipoCombustivel) {
-        super(id, modelo, fabricante, ano, preco);
+    public Carro(
+            Integer id,
+            TipoVeiculo tipo,
+            String modelo,
+            String fabricante,
+            Integer ano,
+            Double preco,
+            String cor,
+            Integer quantidadePortas,
+            TipoCombustivel tipoCombustivel
+    ) {
+        super(id, tipo, modelo, fabricante, ano, preco, cor);
         this.quantidadePortas = quantidadePortas;
         this.tipoCombustivel = tipoCombustivel;
     }
