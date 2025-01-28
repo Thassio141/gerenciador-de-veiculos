@@ -3,6 +3,10 @@ let modalVeiculo;
 let currentPage = 0;
 let pageSize = 10;
 
+function formatarParaReal(valor) {
+  return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
 window.addEventListener("load", () => {
   modalVeiculo = new bootstrap.Modal(document.getElementById("modalVeiculo"));
   listarTodos();
@@ -54,7 +58,7 @@ function preencherTabela(veiculos) {
       <td>${v.fabricante}</td>
       <td>${v.ano}</td>
       <td>${v.cor}</td>
-      <td>${v.preco}</td>
+      <td>${formatarParaReal(v.preco)}</td>
       <td>
         <button class="btn btn-sm btn-info me-1" onclick="detalharVeiculo(${v.id})">
           <i class="bi bi-eye"></i>
@@ -140,8 +144,9 @@ async function excluirVeiculo(id) {
 }
 
 async function salvarVeiculo() {
+  // Primeiro valida campos obrigatórios e não negativos
   if (!validarCamposObrigatorios()) {
-    alert("Preencha todos os campos obrigatórios!");
+    // A própria função de validação já mostra o alert correspondente
     return;
   }
 
@@ -179,7 +184,18 @@ function validarCamposObrigatorios() {
   const ano = document.getElementById("veiculoAno").value;
   const preco = document.getElementById("veiculoPreco").value;
 
+  // Verifica se os campos básicos estão preenchidos
   if (!tipo || !modelo || !fabricante || !ano || !preco) {
+    alert("Preencha todos os campos obrigatórios!");
+    return false;
+  }
+
+  // Converte ano e preco para número e verifica se são negativos
+  const anoNum = parseInt(ano);
+  const precoNum = parseFloat(preco);
+
+  if (anoNum < 0 || precoNum < 0) {
+    alert("Ano e/ou preço não podem ser valores negativos!");
     return false;
   }
 
@@ -187,11 +203,26 @@ function validarCamposObrigatorios() {
     const portas = document.getElementById("veiculoPortas").value;
     const combustivel = document.getElementById("veiculoCombustivel").value;
     if (!portas || !combustivel) {
+      alert("Preencha todos os campos obrigatórios de Carro!");
       return false;
     }
+
+    const portasNum = parseInt(portas);
+    if (portasNum < 0) {
+      alert("A quantidade de portas não pode ser negativa!");
+      return false;
+    }
+
   } else if (tipo === "MOTO") {
     const cilindrada = document.getElementById("veiculoCilindrada").value;
     if (!cilindrada) {
+      alert("Preencha o campo de cilindrada para Motos!");
+      return false;
+    }
+
+    const cilindradaNum = parseInt(cilindrada);
+    if (cilindradaNum < 0) {
+      alert("A cilindrada não pode ser negativa!");
       return false;
     }
   }
