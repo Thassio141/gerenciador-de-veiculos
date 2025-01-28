@@ -1,8 +1,8 @@
 package br.com.gerenciadordeveiculos.repositories;
 
-import br.com.gerenciadordeveiculos.entities.Carro;
-import br.com.gerenciadordeveiculos.entities.Moto;
-import br.com.gerenciadordeveiculos.entities.Veiculo;
+import br.com.gerenciadordeveiculos.models.Carro;
+import br.com.gerenciadordeveiculos.models.Moto;
+import br.com.gerenciadordeveiculos.models.Veiculo;
 import br.com.gerenciadordeveiculos.enums.TipoCombustivel;
 import br.com.gerenciadordeveiculos.enums.TipoVeiculo;
 import org.springframework.jdbc.core.JdbcTemplate;
