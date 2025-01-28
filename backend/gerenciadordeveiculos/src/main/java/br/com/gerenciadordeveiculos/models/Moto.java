@@ -1,4 +1,4 @@
-package br.com.gerenciadordeveiculos.entities;
+package br.com.gerenciadordeveiculos.models;
 
 import br.com.gerenciadordeveiculos.enums.TipoVeiculo;
 import lombok.AllArgsConstructor;

@@ -2,8 +2,8 @@ package br.com.gerenciadordeveiculos.veiculo;
 
 import br.com.gerenciadordeveiculos.dtos.VeiculoRequestDTO;
 import br.com.gerenciadordeveiculos.dtos.VeiculoResponseDTO;
-import br.com.gerenciadordeveiculos.entities.Carro;
-import br.com.gerenciadordeveiculos.entities.Moto;
+import br.com.gerenciadordeveiculos.models.Carro;
+import br.com.gerenciadordeveiculos.models.Moto;
 import br.com.gerenciadordeveiculos.enums.TipoCombustivel;
 import br.com.gerenciadordeveiculos.enums.TipoVeiculo;
 import br.com.gerenciadordeveiculos.exceptions.ExcecaoNegocio;
